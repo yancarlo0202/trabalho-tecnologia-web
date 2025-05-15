@@ -4,44 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Projeto Tecnologia Web (mudar)</title>
-    <link rel="stylesheet" href="./styles.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <header>
         <h1>Locadora</h1>
-        <nav>
-            <a href="#">Início</a>
-            <a href="#">Carros</a>
-            <a href="#">Sobre</a>
-            <a href="#">Contatos</a>
-        </nav>
     </header>
-    <section class="hero">
-        <h2>Alugue o carro perfeito para sua viagem!</h2>
-        <p>Escolha entre diversos modelos com preços acessíveis</p>
-        <a href="#" class="btn">Ver carros</a>
-    </section>
-    <section>
-        <h3>Modelos Dísponiveis</h3>
-        <div class="grid">
-            <div class="carro">
-                <img src="#" alt="Foto Fiat Argo">
-                <h4>Fiat Argo</h4>
-                <p>A partir de R$ 99/dia</p>
-            </div>
-            <div class="carro">
-                <img src="#" alt="Foto Chevrolet Onix">
-                <h4>Chevrolet Onix</h4>
-                <p>A partir de R$ 99/dia</p>
-            </div>
-            <div class="carro">
-                <img src="#" alt="Foto Jeep Renegade">
-                <h4>Chevrolet Jeep Renegade</h4>
-                <p>A partir de R$ 99/dia</p>
-            </div>
-        </div>
-    </section>
-    <section id="Cadastro">
+    <section id="cadastro">
         <h3>Cadastro de novos veículos</h3>
         <form id="form-veiculo">
             <label for="modelo">Modelo:</label>
@@ -69,8 +38,19 @@
             <button type="submit">Cadastrar</button>
         </form>
     </section>
+    <section id="cards-container">
+        <h3>Listagem de carros</h3>
+        <div class="card">
+            <h4>Modelo: Onix</h4>
+            <p>Marca: Chevrolet</p>
+            <p>Ano: 2020</p>
+            <p>Status: Disponível</p>
+            <p>Preço: R$ 100/dia</p>
+        </div>
+    </section>
     <footer>
         <p>Todos os direitos reservados</p>
     </footer>
 </body>
+<script src="script.js"></script>
 </html>
