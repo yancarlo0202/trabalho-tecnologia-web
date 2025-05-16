@@ -49,7 +49,7 @@ function renderizarCards() {
   container.innerHTML = "<h3>Listagem de carros</h3>";
   const veiculos = JSON.parse(localStorage.getItem("veiculos")) || [];
 
-  veiculos.forEach((veiculo, index) => {
+  veiculos.forEach((veiculo) => {
     const card = document.createElement("div");
     card.classList.add("card");
 
@@ -59,7 +59,6 @@ function renderizarCards() {
       <p>Ano: ${veiculo.ano}</p>
       <p>Status: ${veiculo.status}</p>
       <p>Preço: R$ ${veiculo.preco}/dia</p>
-      <button class="btn-editar" data-index="${index}">Editar</button>
     `;
 
     const botaoEditar = document.createElement("button");
@@ -68,10 +67,11 @@ function renderizarCards() {
 
         botaoEditar.addEventListener("click", () => {
             localStorage.setItem("veiculoParaEditar", JSON.stringify(veiculo));
-            window.location.href = "index.html?editar=1";
+            window.location.href = "cadastro.html?editar=1";
+
     });
 
-card.appendChild(botaoEditar);
+    card.appendChild(botaoEditar);
 
 
     container.appendChild(card);
