@@ -123,6 +123,13 @@ header nav a:hover {
   margin-bottom: 10px;
 }
 
+.imagem-veiculo {
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
 .modal.hidden {
   display: none;
 }

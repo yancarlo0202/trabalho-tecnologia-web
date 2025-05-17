@@ -9,18 +9,45 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const modelo = document.getElementById("modelo").value;
       const marca = document.getElementById("marca").value;
-      const ano = document.getElementById("ano").value;
+      const ano = parseInt(document.getElementById("ano").value);
       const placa = document.getElementById("placa").value;
       const status = document.getElementById("status").value;
+      const classificacao = document.getElementById("classificacao").value;
       const preco = document.getElementById("preco").value;
 
-      const novoVeiculo = { modelo, marca, ano, placa, status, preco };
-      const veiculos = JSON.parse(localStorage.getItem("veiculos")) || [];
-      veiculos.push(novoVeiculo);
-      localStorage.setItem("veiculos", JSON.stringify(veiculos));
+      const anoAtual = new Date().getFullYear();
 
-      form.reset();
-      renderizarCards();
+      if (ano < 2000 || ano > anoAtual) {
+        alert("Ano inválido.");
+        return;
+      }
+
+      const imagemURL = document.getElementById("imagem-url").value;
+
+      if (imagemURL.trim() !== "") {
+        const novoVeiculo = { 
+          modelo, 
+          marca, 
+          ano, 
+          placa, 
+          status,
+          classificacao, 
+          preco,
+          imagem: imagemURL,
+        };
+
+        const veiculos = JSON.parse(localStorage.getItem("veiculos")) || [];
+        veiculos.push(novoVeiculo);
+        localStorage.setItem("veiculos", JSON.stringify(veiculos));
+
+        alert("Veículo cadastrado com sucesso!");
+
+        form.reset();
+        renderizarCards();
+      } else {
+        alert("Por favor, informe a URL da imagem do veículo.");
+      }
+
     });
   }
 
@@ -54,10 +81,13 @@ function renderizarCards() {
     card.classList.add("card");
 
     card.innerHTML = `
+      <img src="${veiculo.imagem}" alt="Imagem do veículo" class="imagem-veiculo" />
       <h4>Modelo: ${veiculo.modelo}</h4>
       <p>Marca: ${veiculo.marca}</p>
       <p>Ano: ${veiculo.ano}</p>
+      <P>Placa: ${veiculo.placa}</p>
       <p>Status: ${veiculo.status}</p>
+      <p>Classificação: ${veiculo.classificacao}</p>
       <p>Preço: R$ ${veiculo.preco}/dia</p>
     `;
 
@@ -76,7 +106,7 @@ function renderizarCards() {
     botaoExcluir.addEventListener("click", () => {
       if (confirm("Deseja realmente excluir este veículo?")) {
         const veiculos = JSON.parse(localStorage.getItem("veiculos")) || [];
-        veiculos.splice(index, 1); // aqui usa o índice diretamente
+        veiculos.splice(index, 1);
         localStorage.setItem("veiculos", JSON.stringify(veiculos));
         renderizarCards();
       }
@@ -97,6 +127,7 @@ document.getElementById("salvar-edicao")?.addEventListener("click", () => {
       marca: document.getElementById("edit-marca").value,
       ano: document.getElementById("edit-ano").value,
       status: document.getElementById("edit-status").value,
+      classificacao: document.getElementById("edit-classificacao").value,
       preco: document.getElementById("edit-preco").value,
     };
 
@@ -107,7 +138,10 @@ document.getElementById("salvar-edicao")?.addEventListener("click", () => {
   }
 });
 
-document.getElementById("cancelar-edicao").addEventListener("click", fecharModal);
+document.getElementById("cancelar-edicao").addEventListener("click", () => {
+  fecharModal();
+  window.location.href = "carros.html";
+});
 
 function fecharModal() {
   document.getElementById("modal-editar").classList.add("hidden");
