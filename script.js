@@ -28,28 +28,28 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 window.addEventListener("DOMContentLoaded", () => {
-    const params = new URLSearchParams(window.location.search);
-    if (params.get("editar") === "1") {
-        const veiculo = JSON.parse(localStorage.getItem("veiculoParaEditar"));
-        if (veiculo) {
-            document.getElementById("edit-modelo").value = veiculo.modelo || "";
-            document.getElementById("edit-marca").value = veiculo.marca || "";
-            document.getElementById("edit-ano").value = veiculo.ano || "";
-            document.getElementById("edit-status").value = veiculo.status || "";
-            document.getElementById("edit-preco").value = veiculo.preco || "";
+  const params = new URLSearchParams(window.location.search);
+  if (params.get("editar") === "1") {
+    const edicao = JSON.parse(localStorage.getItem("veiculoParaEditar"));
+    if (edicao) {
+      cardEditandoIndex = edicao.index;
+      document.getElementById("edit-modelo").value = edicao.modelo || "";
+      document.getElementById("edit-marca").value = edicao.marca || "";
+      document.getElementById("edit-ano").value = edicao.ano || "";
+      document.getElementById("edit-status").value = edicao.status || "";
+      document.getElementById("edit-preco").value = edicao.preco || "";
 
-            document.getElementById("modal-editar").classList.remove("hidden");
-        }
+      document.getElementById("modal-editar").classList.remove("hidden");
     }
+  }
 });
-
 
 function renderizarCards() {
   const container = document.getElementById("cards-container");
   container.innerHTML = "<h3>Listagem de carros</h3>";
   const veiculos = JSON.parse(localStorage.getItem("veiculos")) || [];
 
-  veiculos.forEach((veiculo) => {
+  veiculos.forEach((veiculo, index) => {
     const card = document.createElement("div");
     card.classList.add("card");
 
@@ -62,54 +62,49 @@ function renderizarCards() {
     `;
 
     const botaoEditar = document.createElement("button");
-        botaoEditar.textContent = "Editar";
-        botaoEditar.classList.add("btn-editar");
-
-        botaoEditar.addEventListener("click", () => {
-            localStorage.setItem("veiculoParaEditar", JSON.stringify(veiculo));
-            window.location.href = "cadastro.html?editar=1";
-
+    botaoEditar.textContent = "Editar";
+    botaoEditar.classList.add("btn-editar");
+    botaoEditar.addEventListener("click", () => {
+      localStorage.setItem("veiculoParaEditar", JSON.stringify({ ...veiculo, index }));
+      window.location.href = "cadastro.html?editar=1";
     });
-
     card.appendChild(botaoEditar);
 
+    const botaoExcluir = document.createElement("button");
+    botaoExcluir.textContent = "Excluir";
+    botaoExcluir.classList.add("btn-excluir");
+    botaoExcluir.addEventListener("click", () => {
+      if (confirm("Deseja realmente excluir este veículo?")) {
+        const veiculos = JSON.parse(localStorage.getItem("veiculos")) || [];
+        veiculos.splice(index, 1); // aqui usa o índice diretamente
+        localStorage.setItem("veiculos", JSON.stringify(veiculos));
+        renderizarCards();
+      }
+    });
+    card.appendChild(botaoExcluir);
 
     container.appendChild(card);
   });
-
-  document.querySelectorAll(".btn-editar").forEach(btn => {
-    btn.addEventListener("click", (e) => {
-      const index = e.target.getAttribute("data-index");
-      const veiculos = JSON.parse(localStorage.getItem("veiculos")) || [];
-      const veiculo = veiculos[index];
-      cardEditandoIndex = index;
-
-      document.getElementById("edit-modelo").value = veiculo.modelo;
-      document.getElementById("edit-marca").value = veiculo.marca;
-      document.getElementById("edit-ano").value = veiculo.ano;
-      document.getElementById("edit-status").value = veiculo.status;
-      document.getElementById("edit-preco").value = veiculo.preco;
-
-      document.getElementById("modal-editar").classList.remove("hidden");
-    });
-  });
 }
 
-document.getElementById("salvar-edicao").addEventListener("click", () => {
+document.getElementById("salvar-edicao")?.addEventListener("click", () => {
   const veiculos = JSON.parse(localStorage.getItem("veiculos")) || [];
 
-  veiculos[cardEditandoIndex] = {
-    ...veiculos[cardEditandoIndex],
-    modelo: document.getElementById("edit-modelo").value,
-    marca: document.getElementById("edit-marca").value,
-    ano: document.getElementById("edit-ano").value,
-    status: document.getElementById("edit-status").value,
-    preco: document.getElementById("edit-preco").value,
-  };
+  if (cardEditandoIndex !== null && veiculos[cardEditandoIndex]) {
+    veiculos[cardEditandoIndex] = {
+      ...veiculos[cardEditandoIndex],
+      modelo: document.getElementById("edit-modelo").value,
+      marca: document.getElementById("edit-marca").value,
+      ano: document.getElementById("edit-ano").value,
+      status: document.getElementById("edit-status").value,
+      preco: document.getElementById("edit-preco").value,
+    };
 
-  localStorage.setItem("veiculos", JSON.stringify(veiculos));
-  fecharModal();
-  renderizarCards();
+    localStorage.setItem("veiculos", JSON.stringify(veiculos));
+    localStorage.removeItem("veiculoParaEditar");
+    fecharModal();
+    window.location.href = "carros.html";
+  }
 });
 
 document.getElementById("cancelar-edicao").addEventListener("click", fecharModal);
