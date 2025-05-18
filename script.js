@@ -71,12 +71,21 @@ window.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-function renderizarCards() {
+document.getElementById("pesquisa-modelo")?.addEventListener("input", (e) => {
+  const termo = e.target.value.toLowerCase();
+  renderizarCards(termo);
+});
+
+function renderizarCards(filtro = "") {
   const container = document.getElementById("cards-container");
   container.innerHTML = "<h3>Listagem de carros</h3>";
   const veiculos = JSON.parse(localStorage.getItem("veiculos")) || [];
 
-  veiculos.forEach((veiculo, index) => {
+  const veiculosFiltrados = veiculos.filter((v) =>
+    v.modelo.toLowerCase().includes(filtro)
+  );
+
+  veiculosFiltrados.forEach((veiculo, index) => {
     const card = document.createElement("div");
     card.classList.add("card");
 
@@ -85,7 +94,7 @@ function renderizarCards() {
       <h4>Modelo: ${veiculo.modelo}</h4>
       <p>Marca: ${veiculo.marca}</p>
       <p>Ano: ${veiculo.ano}</p>
-      <P>Placa: ${veiculo.placa}</p>
+      <p>Placa: ${veiculo.placa}</p>
       <p>Status: ${veiculo.status}</p>
       <p>Classificação: ${veiculo.classificacao}</p>
       <p>Preço: R$ ${veiculo.preco}/dia</p>
